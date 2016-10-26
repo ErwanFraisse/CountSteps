@@ -15,12 +15,13 @@ public class Tester {
 		// Extract columns for time, and x acceleration, y acceleration, z
 		// acceleration
 		double[] time = ArrayHelper.extractColumn(sampleData, 0);
-		double[][] accelerationData = ArrayHelper.extractColumns(sampleData, new int[] { 4, 5, 6 });
+		double[][] accelerationData = ArrayHelper.extractColumns(sampleData, new int[] { 1, 2, 3 });
 
 		double[] accelerationMagnitudes = CountStepsBlank.calculateMagnitudesFor(accelerationData);
 
 		double[][] displayData = ArrayHelper.combineAsColumns(time, accelerationMagnitudes);
 		
-		DataExplorer.runDataExplorer(displayData, new String[] {"time" ,"mags"}, videofile);
+		DataExplorer.runDataExplorer(displayData, new String[] {"time", "mags"}, videofile);
+		CountStepsBlank.countSteps(time, sampleData);
 	}
 }

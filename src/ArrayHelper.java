@@ -72,9 +72,10 @@ public class ArrayHelper {
 
 		double[][] col = new double[data.length][numberOfColumns];
 
-		for (int i = 0; i < data.length; i++) {
-			for (int j = colStartIndex; j < colStartIndex + numberOfColumns; j++)
+		for (int j = colStartIndex; j < colStartIndex + numberOfColumns; j++) {
+			for (int i = 0; i < data.length; i++) {
 				col[i][j - colStartIndex] = data[i][j];
+			}
 		}
 
 		return col;

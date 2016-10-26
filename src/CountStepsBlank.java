@@ -5,87 +5,68 @@ import org.math.plot.Plot2DPanel;
 
 public class CountStepsBlank {
 
-	/***
-	 * Counts the number of steps based on sensor data.
-	 * 
-	 * @param times
-	 *            a 1d-array with the elapsed times in miliseconds for each row
-	 *            in the sensorData array.
-	 * 
-	 * @param sensorData
-	 *            a 2d-array where rows represent successive sensor data
-	 *            samples, and the columns represent different sensors. We
-	 *            assume there are 6 columns. Columns 0 - 2 are data from the x,
-	 *            y, and z axes of an accelerometer, and 3-5 are data from the
-	 *            x, y, and z axes of a gyro.
-	 * 
-	 * @return an int representing the number of steps
-	 */
-	private static int countSteps(double[] times, double[][] sensorData) {
-		return 0;
+public static int countSteps(double[] times, double[][] censorData) {
+		
+		double[][] accelData = ArrayHelper.extractColumns(censorData, 1,3);
+		double[][] gyroData = ArrayHelper.extractColumns(censorData, 4,3);
+		double[] accelVectorArray = calculateMagnitudesFor(accelData);
+		double[] gyroVectorArray = calculateMagnitudesFor(gyroData);
+		double SDAccel = calculateStandardDeviation(accelVectorArray, mean(accelVectorArray));
+		double SDGyro = calculateStandardDeviation(gyroVectorArray, mean(gyroVectorArray));
+		
+		int stepsAccel = 0;
+		for (int i = 1; i < accelVectorArray.length - 1; i++) {
+			if (accelVectorArray[i] > accelVectorArray[i-1] && accelVectorArray[i] > accelVectorArray[i+1]) {
+				if (accelVectorArray[i] > mean(accelVectorArray) + SDAccel) stepsAccel++;
+			}
+		}
+		System.out.println("Calculated steps for acceleration data: " + stepsAccel);
+		
+		int stepsGyro = 0;
+		for (int i = 1; i < gyroVectorArray.length - 1; i++) {
+			if (gyroVectorArray[i] > gyroVectorArray[i-1] && gyroVectorArray[i] > gyroVectorArray[i+1]) {
+				if (gyroVectorArray[i] > mean(gyroVectorArray) + 0.85*SDGyro) stepsGyro++;		
+			}
+		}
+		System.out.println("Calculated steps for gyro data: " + stepsGyro);
+		return stepsGyro;
+	}
+	
+	public static double mean(double[] arr) {
+		double totalSum = 0.0;
+		for (int i = 0; i < arr.length; i++) {
+			totalSum += arr[i];
+		}
+		return totalSum/arr.length;
+	}
+	
+	public static double calculateStandardDeviation(double[] arr, double mean) {
+		double SumofSquaredDifferences = 0.0;
+		double sum = arr.length - 1;
+		for (int i = 0; i < arr.length; i++) {
+			SumofSquaredDifferences += (arr[i] - mean)*(arr[i] - mean);
+		}
+		double standardDeviation = Math.sqrt(SumofSquaredDifferences/sum);
+		return standardDeviation;
 	}
 
-	/***
-	 * Calculate the magnitude for a vector with x, y, and z components.
-	 * 
-	 * @param x
-	 *            the x component
-	 * @param y
-	 *            the y component
-	 * @param z
-	 *            the z component
-	 * @return the magnitude of the vector
-	 */
+	public static double[] calculateMagnitudesFor(double[][] censorData) {
+		double[] vectorMagnitudeArray = new double[censorData.length];
+		for (int i = 0; i < censorData.length; i++) {
+			vectorMagnitudeArray[i] = calculateMagnitude(censorData[i][0], censorData[i][1], censorData[i][2]);
+		}
+		return vectorMagnitudeArray;
+	}
+	
+	public static double[] convertTime(double[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = i;
+		}
+		return arr;
+	}
+	
 	public static double calculateMagnitude(double x, double y, double z) {
 		return Math.sqrt(x*x + y*y + z*z);
-	}
-
-	/***
-	 * Takes a 2d array with 3 columns representing the 3 axes of a sensor.
-	 * Calculates the magnitude of the vector represented by each row. Returns a
-	 * new array with the same number of rows where each element contains this
-	 * magnitude.
-	 * 
-	 * @param sensorData
-	 *            an array with n rows and 3 columns. Each row represents a
-	 *            different measurement, and each column represents a different
-	 *            axis of the sensor.
-	 * 
-	 * @return an array with n rows and each element is the magnitude of the
-	 *         vector for the corresponding row in the sensorData array
-	 */
-	public static double[] calculateMagnitudesFor(double[][] sensorData) {
-		double[] mags = new double[sensorData.length];
-		
-		for (int r = 0; r < mags.length; r++) {
-			mags[r] = calculateMagnitude(sensorData[r][0], sensorData[r][1], sensorData[r][2]);
-		}
-		
-		return mags;
-	}
-
-	/***
-	 * Return the standard deviation of the data.
-	 * 
-	 * @param arr
-	 *            the array of the data
-	 * @param mean
-	 *            the mean of the data (must be pre-calculated).
-	 * @return the standard deviation of the data.
-	 */
-	private static double calculateStandardDeviation(double[] arr, double mean) {
-		return 0.0;
-	}
-
-	/***
-	 * Return the mean of the data in the array
-	 * 
-	 * @param arr
-	 *            the array of values
-	 * @return the mean of the data
-	 */
-	private static double calculateMean(double[] arr) {
-		return 0.0;
 	}
 
 	public static void displayJFrame(Plot2DPanel plot) {
