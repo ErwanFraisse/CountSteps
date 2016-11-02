@@ -21,7 +21,7 @@ public class Tester {
 
 		double[][] displayData = ArrayHelper.combineAsColumns(time, accelerationMagnitudes);
 		
-		DataExplorer.runDataExplorer(displayData, new String[] {"time", "mags"}, videofile);
+//		DataExplorer.runDataExplorer(displayData, new String[] {"time", "mags"}, videofile);
 		CountStepsBlank.countSteps(time, sampleData);
 	}
 }

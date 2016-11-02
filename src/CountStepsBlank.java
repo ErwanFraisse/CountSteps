@@ -8,16 +8,19 @@ public class CountStepsBlank {
 public static int countSteps(double[] times, double[][] censorData) {
 		
 		double[][] accelData = ArrayHelper.extractColumns(censorData, 1,3);
-		double[][] gyroData = ArrayHelper.extractColumns(censorData, 4,3);
+		double[][] gyroData = ArrayHelper.extractColumns(censorData, 7,3);
+		double[][] linearAccelData = ArrayHelper.extractColumns(censorData, 10,3);
 		double[] accelVectorArray = calculateMagnitudesFor(accelData);
 		double[] gyroVectorArray = calculateMagnitudesFor(gyroData);
+		double[] linearAccelVectorArray = calculateMagnitudesFor(linearAccelData);
 		double SDAccel = calculateStandardDeviation(accelVectorArray, mean(accelVectorArray));
 		double SDGyro = calculateStandardDeviation(gyroVectorArray, mean(gyroVectorArray));
+		double SDlinearAccel = calculateStandardDeviation(linearAccelVectorArray, mean(linearAccelVectorArray));
 		
 		int stepsAccel = 0;
 		for (int i = 1; i < accelVectorArray.length - 1; i++) {
 			if (accelVectorArray[i] > accelVectorArray[i-1] && accelVectorArray[i] > accelVectorArray[i+1]) {
-				if (accelVectorArray[i] > mean(accelVectorArray) + SDAccel) stepsAccel++;
+				if (accelVectorArray[i] > mean(accelVectorArray) + 1*SDAccel || accelVectorArray[i]-accelVectorArray[i+1] > 1*SDAccel  || accelVectorArray[i]-accelVectorArray[i-1] > 1*SDAccel) stepsAccel++;
 			}
 		}
 		System.out.println("Calculated steps for acceleration data: " + stepsAccel);
@@ -25,10 +28,26 @@ public static int countSteps(double[] times, double[][] censorData) {
 		int stepsGyro = 0;
 		for (int i = 1; i < gyroVectorArray.length - 1; i++) {
 			if (gyroVectorArray[i] > gyroVectorArray[i-1] && gyroVectorArray[i] > gyroVectorArray[i+1]) {
-				if (gyroVectorArray[i] > mean(gyroVectorArray) + 0.85*SDGyro) stepsGyro++;		
+				if (gyroVectorArray[i] > mean(gyroVectorArray) + 1*SDGyro || gyroVectorArray[i]-gyroVectorArray[i+1] > 1*SDGyro || gyroVectorArray[i]-gyroVectorArray[i-1] > 1*SDGyro) stepsGyro++;		
 			}
 		}
 		System.out.println("Calculated steps for gyro data: " + stepsGyro);
+		
+		int stepslinearAccel = 0;
+		for (int i = 1; i < linearAccelVectorArray.length - 1; i++) {
+			if (linearAccelVectorArray[i] > linearAccelVectorArray[i-1] && linearAccelVectorArray[i] > linearAccelVectorArray[i+1]) {
+				if (linearAccelVectorArray[i] > mean(linearAccelVectorArray) + 1*SDlinearAccel || linearAccelVectorArray[i]-linearAccelVectorArray[i-1] > 1*SDlinearAccel || linearAccelVectorArray[i]-linearAccelVectorArray[i+1] > 1*SDlinearAccel) stepslinearAccel++;		
+			}
+		}
+		System.out.println("Calculated steps for linear acceleration data: " + stepslinearAccel);
+		
+		int generalsteps = (int)(stepsGyro + stepslinearAccel + stepsAccel)/3;
+		
+		System.out.println("Calculated steps for linear acceleration, gyro, and acceleration data combined: " + generalsteps);
+		
+		
+		
+		
 		return stepsGyro;
 	}
 	
