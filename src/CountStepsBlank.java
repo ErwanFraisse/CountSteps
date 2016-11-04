@@ -20,30 +20,26 @@ public static int countSteps(double[] times, double[][] censorData) {
 		int stepsAccel = 0;
 		for (int i = 1; i < accelVectorArray.length - 1; i++) {
 			if (accelVectorArray[i] > accelVectorArray[i-1] && accelVectorArray[i] > accelVectorArray[i+1]) {
-				if (accelVectorArray[i] > mean(accelVectorArray) + 1*SDAccel || accelVectorArray[i]-accelVectorArray[i+1] > 1*SDAccel  || accelVectorArray[i]-accelVectorArray[i-1] > 1*SDAccel) stepsAccel++;
+				if (accelVectorArray[i] > mean(accelVectorArray) + 0.7*SDAccel) stepsAccel++;
 			}
 		}
-		System.out.println("Calculated steps for acceleration data: " + stepsAccel);
+		System.out.print("Acceleration: " + stepsAccel + "\t|\t");
 		
 		int stepsGyro = 0;
 		for (int i = 1; i < gyroVectorArray.length - 1; i++) {
 			if (gyroVectorArray[i] > gyroVectorArray[i-1] && gyroVectorArray[i] > gyroVectorArray[i+1]) {
-				if (gyroVectorArray[i] > mean(gyroVectorArray) + 1*SDGyro || gyroVectorArray[i]-gyroVectorArray[i+1] > 1*SDGyro || gyroVectorArray[i]-gyroVectorArray[i-1] > 1*SDGyro) stepsGyro++;		
+				if (gyroVectorArray[i] > mean(gyroVectorArray) + 0.5*SDGyro) stepsGyro++;		
 			}
 		}
-		System.out.println("Calculated steps for gyro data: " + stepsGyro);
+		System.out.print("Gyro: " + stepsGyro + "\t|\t");
 		
 		int stepslinearAccel = 0;
 		for (int i = 1; i < linearAccelVectorArray.length - 1; i++) {
 			if (linearAccelVectorArray[i] > linearAccelVectorArray[i-1] && linearAccelVectorArray[i] > linearAccelVectorArray[i+1]) {
-				if (linearAccelVectorArray[i] > mean(linearAccelVectorArray) + 1*SDlinearAccel || linearAccelVectorArray[i]-linearAccelVectorArray[i-1] > 1*SDlinearAccel || linearAccelVectorArray[i]-linearAccelVectorArray[i+1] > 1*SDlinearAccel) stepslinearAccel++;		
+				if (linearAccelVectorArray[i] > mean(linearAccelVectorArray) + 0.3*SDlinearAccel) stepslinearAccel++;		
 			}
 		}
-		System.out.println("Calculated steps for linear acceleration data: " + stepslinearAccel);
-		
-		int generalsteps = (int)(stepsGyro + stepslinearAccel + stepsAccel)/3;
-		
-		System.out.println("Calculated steps for linear acceleration, gyro, and acceleration data combined: " + generalsteps);
+		System.out.println("Linear acceleration: " + stepslinearAccel);
 		
 		
 		
