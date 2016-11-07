@@ -20,7 +20,7 @@ public class BasicPlotting {
 		sampleData2 = dataset2.getAllData();
 		sampleData3 = dataset3.getAllData();
 
-		double[] time = ArrayHelper.extractColumn(sampleData, 0);		
+		double[] time = ArrayHelper.extractColumn(sampleData, 0);
 		
 //		double[][] accel = ArrayHelper.extractColumns(sampleData, new int[] { 1, 2, 3 });
 //		double[] magAccel = CountStepsBlank.calculateMagnitudesFor(accel);
@@ -29,7 +29,7 @@ public class BasicPlotting {
 		
 //		System.out.println(CountStepsBlank.mean(magAccel));
 //		System.out.println(CountStepsBlank.calculateStandardDeviation(magAccel, CountStepsBlank.mean(magAccel)));
-		CountStepsBlank.countSteps(time, sampleData);
+		CountStepsBlank.countSteps(CountStepsBlank.getAccurateTime(time), sampleData);
 		
 		double[] time2 = ArrayHelper.extractColumn(sampleData2, 0);		
 		
@@ -40,7 +40,7 @@ public class BasicPlotting {
 		
 //		System.out.println(CountStepsBlank.mean(magsAccel2));
 //		System.out.println(CountStepsBlank.calculateStandardDeviation(magsAccel2, CountStepsBlank.mean(magsAccel2)));
-		CountStepsBlank.countSteps(time2, sampleData2);
+		CountStepsBlank.countSteps(CountStepsBlank.getAccurateTime(time2), sampleData2);
 		
 		double[] time3 = ArrayHelper.extractColumn(sampleData3, 0);		
 		
@@ -51,7 +51,7 @@ public class BasicPlotting {
 		
 //		System.out.println(CountStepsBlank.mean(magsAccel3));
 //		System.out.println(CountStepsBlank.calculateStandardDeviation(magsAccel3, CountStepsBlank.mean(magsAccel3)));
-		CountStepsBlank.countSteps(time3, sampleData3);
+		CountStepsBlank.countSteps(CountStepsBlank.getAccurateTime(time3), sampleData3);
 		
 		
 //		Plot2DPanel plot = new Plot2DPanel();

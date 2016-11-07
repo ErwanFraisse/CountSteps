@@ -34,6 +34,14 @@ public static void countSteps(double[] times, double[][] censorData) {
 		System.out.print( sensorType + " steps: " + steps + "\t|\t");
 	}
 	
+	public static double[] getAccurateTime(double[] times) {
+		double[] newtimes = new double[times.length];
+		for (int i = 0; i < times.length; i++) {
+			newtimes[i] = times[i]- times[0];
+		}
+		return newtimes;
+	}
+	
 	public static double mean(double[] arr) {
 		double totalSum = 0.0;
 		for (int i = 0; i < arr.length; i++) {
