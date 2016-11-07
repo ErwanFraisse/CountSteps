@@ -5,7 +5,7 @@ import org.math.plot.Plot2DPanel;
 
 public class CountStepsBlank {
 
-public static int countSteps(double[] times, double[][] censorData) {
+public static void countSteps(double[] times, double[][] censorData) {
 		
 		double[][] accelData = ArrayHelper.extractColumns(censorData, 1,3);
 		double[][] gyroData = ArrayHelper.extractColumns(censorData, 7,3);
@@ -17,34 +17,21 @@ public static int countSteps(double[] times, double[][] censorData) {
 		double SDGyro = calculateStandardDeviation(gyroVectorArray, mean(gyroVectorArray));
 		double SDlinearAccel = calculateStandardDeviation(linearAccelVectorArray, mean(linearAccelVectorArray));
 		
-		int stepsAccel = 0;
-		for (int i = 1; i < accelVectorArray.length - 1; i++) {
-			if (accelVectorArray[i] > accelVectorArray[i-1] && accelVectorArray[i] > accelVectorArray[i+1]) {
-				if (accelVectorArray[i] > mean(accelVectorArray) + 0.7*SDAccel) stepsAccel++;
+		countSteps(accelVectorArray, SDAccel, 0.7, "Acceleration");
+		countSteps(gyroVectorArray, SDGyro, 0.5, "Gyro");
+		countSteps(linearAccelVectorArray, SDlinearAccel, 0.3, "Linear acceleration");
+		System.out.println("");
+		
+	}
+
+	public static void countSteps(double[] arr, double SD, double decimal, String sensorType) {
+		int steps = 0;
+		for (int i = 1; i < arr.length - 1; i++) {
+			if (arr[i] > arr[i-1] && arr[i] > arr[i+1]) {
+				if (arr[i] > mean(arr) + decimal*SD) steps++;
 			}
 		}
-		System.out.print("Acceleration: " + stepsAccel + "\t|\t");
-		
-		int stepsGyro = 0;
-		for (int i = 1; i < gyroVectorArray.length - 1; i++) {
-			if (gyroVectorArray[i] > gyroVectorArray[i-1] && gyroVectorArray[i] > gyroVectorArray[i+1]) {
-				if (gyroVectorArray[i] > mean(gyroVectorArray) + 0.5*SDGyro) stepsGyro++;		
-			}
-		}
-		System.out.print("Gyro: " + stepsGyro + "\t|\t");
-		
-		int stepslinearAccel = 0;
-		for (int i = 1; i < linearAccelVectorArray.length - 1; i++) {
-			if (linearAccelVectorArray[i] > linearAccelVectorArray[i-1] && linearAccelVectorArray[i] > linearAccelVectorArray[i+1]) {
-				if (linearAccelVectorArray[i] > mean(linearAccelVectorArray) + 0.3*SDlinearAccel) stepslinearAccel++;		
-			}
-		}
-		System.out.println("Linear acceleration: " + stepslinearAccel);
-		
-		
-		
-		
-		return stepsGyro;
+		System.out.print( sensorType + " steps: " + steps + "\t|\t");
 	}
 	
 	public static double mean(double[] arr) {
