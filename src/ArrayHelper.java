@@ -251,11 +251,14 @@ public class ArrayHelper {
 	}
 
 	/***
-	 * Combine several 1d arrays together into a 2d array as if each 1d array was a column.
-	 * @param columns the 1d arrays to combine
+	 * Combine several 1d arrays together into a 2d array as if each 1d array
+	 * was a column.
+	 * 
+	 * @param columns
+	 *            the 1d arrays to combine
 	 * @return a 2d array with each parameter as a column in the output
 	 */
-	public static double[][] combineAsColumns(double[]...columns) {
+	public static double[][] combineAsColumns(double[]... columns) {
 		// TODO: should we make a fresh copy?
 		return transposeArray(columns);
 	}
