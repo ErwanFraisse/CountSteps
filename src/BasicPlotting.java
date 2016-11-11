@@ -6,7 +6,7 @@ import org.math.plot.Plot2DPanel;
 public class BasicPlotting {
 	public static double[][] sampleData, sampleData2, sampleData3;
 	public static String datafile = "data/walkingSampleData-out.csv";
-	public static String datafile2 = "TestData/data/right thigh 32.csv";
+	public static String datafile2 = "TestData/data/back pocket 32.csv";
 
 	public static void main(String[] args) {
 		// Create data set
@@ -48,10 +48,10 @@ public class BasicPlotting {
 		plot.addLinePlot("Original Acceleration Data count steps", OGmagAccel);
 		plot.addLinePlot("NEW accel Data magnitude", NEWmagAccel);
 		plot.addLinePlot("NEW Gyro Data magnitude", NEWmagGyro);
-		plot.addLinePlot("NEW linear accel magnitude", NEWmagLinAccel);
-//		plot.addLinePlot("threshold NEW gyro", threshold(CountStepsBlank.mean(NEWmagGyro), NEWmagGyro, CountStepsBlank.calculateStandardDeviation(NEWmagGyro, CountStepsBlank.mean(NEWmagGyro)), 2));
-//		plot.addLinePlot("threshold NEW accel", threshold(CountStepsBlank.mean(NEWmagAccel), NEWmagAccel, CountStepsBlank.calculateStandardDeviation(NEWmagAccel, CountStepsBlank.mean(NEWmagAccel)), 1));
-//		plot.addLinePlot("threshold NEW gyro", threshold(CountStepsBlank.mean(NEWmagLinAccel), NEWmagLinAccel, CountStepsBlank.calculateStandardDeviation(NEWmagLinAccel, CountStepsBlank.mean(NEWmagLinAccel)), 2));
+//		plot.addLinePlot("NEW linear accel magnitude", NEWmagLinAccel);
+		plot.addLinePlot("threshold NEW gyro", threshold(CountStepsBlank.mean(NEWmagGyro), NEWmagGyro, CountStepsBlank.calculateStandardDeviation(NEWmagGyro, CountStepsBlank.mean(NEWmagGyro)), 2));
+		plot.addLinePlot("threshold NEW accel", threshold(CountStepsBlank.mean(NEWmagAccel), NEWmagAccel, CountStepsBlank.calculateStandardDeviation(NEWmagAccel, CountStepsBlank.mean(NEWmagAccel)), 1));
+//		plot.addLinePlot("threshold NEW lin Accel", threshold(CountStepsBlank.mean(NEWmagLinAccel), NEWmagLinAccel, CountStepsBlank.calculateStandardDeviation(NEWmagLinAccel, CountStepsBlank.mean(NEWmagLinAccel)), 2));
 //		plot.addLinePlot("threshold OG accel", threshold(CountStepsBlank.mean(OGmagAccel), OGmagAccel, CountStepsBlank.calculateStandardDeviation(OGmagAccel, CountStepsBlank.mean(OGmagAccel)), 1));
 
 		
