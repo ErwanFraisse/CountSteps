@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.Random;
+
 import javax.swing.JFrame;
 import org.math.plot.Plot2DPanel;
 
@@ -15,31 +14,28 @@ public class BasicPlotting {
 
 		// Get 2d array of all data
 		sampleData = dataset.getAllData();
-		sampleData = copyData(sampleData);
 		sampleData2 = dataset2.getAllData();
-		sampleData2 = copyData(sampleData2);
 
 		double[] time = ArrayHelper.extractColumn(sampleData2, 0);
 
+		//OG = original
 		double[][] OGaccel = ArrayHelper.extractColumns(sampleData2, new int[] { 1, 2, 3 });
 		double[] OGmagAccel = CountStepsBlank.calculateMagnitudesFor(OGaccel);
 
-		// System.out.println(CountStepsBlank.mean(OGmagAccel));
-		// System.out.println(CountStepsBlank.calculateStandardDeviation(OGmagAccel,
-		// CountStepsBlank.mean(OGmagAccel)));
+		//naive, initial algorithm
 		CountStepsBlank.countSteps(CountStepsBlank.getAccurateTime(time), sampleData2);
 
 		double[] time2 = ArrayHelper.extractColumn(sampleData2, 0);
 
+		//Iphone 6S did not have linear acceleration data so I commented it out
 		double[][] NEWaccel = ArrayHelper.extractColumns(sampleData2, new int[] { 1, 2, 3 });
 		double[] NEWmagAccel = CountStepsBlank.calculateMagnitudesFor(NEWaccel);
 		double[][] NEWgyro = ArrayHelper.extractColumns(sampleData2, new int[] { 4, 5, 6 });
 		double[] NEWmagGyro = CountStepsBlank.calculateMagnitudesFor(NEWgyro);
-		double[][] NEWlinAccel = ArrayHelper.extractColumns(sampleData2, new int[] { 7, 8, 9 });
-		double[] NEWmagLinAccel = CountStepsBlank.calculateMagnitudesFor(NEWlinAccel);
+//		double[][] NEWlinAccel = ArrayHelper.extractColumns(sampleData2, new int[] { 7, 8, 9 });
+//		double[] NEWmagLinAccel = CountStepsBlank.calculateMagnitudesFor(NEWlinAccel);
 
-		// System.out.println(CountStepsBlank.mean(NEWmagAccel));
-		// System.out.println(CountStepsBlank.calculateStandardDeviation(NEWmagAccel, CountStepsBlank.mean(NEWmagAccel)));
+		//improved algorithm
 		CountStepsBlank.refinedCountSteps(CountStepsBlank.getAccurateTime(time2), sampleData2);
 
 		Plot2DPanel plot = new Plot2DPanel();
@@ -52,7 +48,7 @@ public class BasicPlotting {
 		plot.addLinePlot("threshold NEW gyro", threshold(CountStepsBlank.mean(NEWmagGyro), NEWmagGyro, CountStepsBlank.calculateStandardDeviation(NEWmagGyro, CountStepsBlank.mean(NEWmagGyro)), 2));
 		plot.addLinePlot("threshold NEW accel", threshold(CountStepsBlank.mean(NEWmagAccel), NEWmagAccel, CountStepsBlank.calculateStandardDeviation(NEWmagAccel, CountStepsBlank.mean(NEWmagAccel)), 1));
 //		plot.addLinePlot("threshold NEW lin Accel", threshold(CountStepsBlank.mean(NEWmagLinAccel), NEWmagLinAccel, CountStepsBlank.calculateStandardDeviation(NEWmagLinAccel, CountStepsBlank.mean(NEWmagLinAccel)), 2));
-//		plot.addLinePlot("threshold OG accel", threshold(CountStepsBlank.mean(OGmagAccel), OGmagAccel, CountStepsBlank.calculateStandardDeviation(OGmagAccel, CountStepsBlank.mean(OGmagAccel)), 1));
+		plot.addLinePlot("threshold OG accel", threshold(CountStepsBlank.mean(OGmagAccel), OGmagAccel, CountStepsBlank.calculateStandardDeviation(OGmagAccel, CountStepsBlank.mean(OGmagAccel)), 1));
 
 		
 		// put the PlotPanel in a JFrame, as a JPanel
@@ -61,16 +57,17 @@ public class BasicPlotting {
 		frame.setContentPane(plot);
 		frame.setVisible(true);
 	}
-
-	public static double[][] copyData(double[][] sensorData) {
-		double[][] newDataArray = new double[sensorData.length][sensorData[0].length];
-		for (int i = 0; i < sensorData.length; i++) {
-			if (sensorData[i][3] != 0)
-				newDataArray[i] = sensorData[i];
-		}
-		return newDataArray;
-	}
 	
+	/***
+	 * calculates mean + x*SD threshold of a sensor
+	 * 
+	 * @param mean/// sensor's magnitude array mean
+	 * @param vector/// sensor's magnitude array
+	 * @param SD/// sensor's magnitude array standard deviation
+	 * @param decimal/// sensors's decimal value to get desired standard deviations(x*SD)
+	 * 
+	 * @return a double array representing the threshold to draw on the graph
+	 */
 	public static double[] threshold(double mean, double[] vector, double SD, double decimal) {
 		double[] meanArray = new double[vector.length];
 		for (int j = 0; j < meanArray.length; j++) {
